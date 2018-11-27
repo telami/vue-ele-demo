@@ -2,15 +2,18 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <cube-button> qq</cube-button>
   </div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
+import Button from 'cube-ui/src/components/button/button'
 
 export default {
   name: 'app',
   components: {
+    Button,
     HelloWorld
   }
 }
