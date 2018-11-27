@@ -1,18 +1,30 @@
 <template>
   <div id="app">
-    <Button>youtube</Button>
+    <v-header :seller="seller"></v-header>
   </div>
 </template>
 
 <script>
-import Button from 'cube-ui/src/components/button/button'
+  import VHeader from 'components/v-header/v-header'
+  import { getSeller } from 'api'
 
-export default {
-  name: 'app',
-  components: {
-    Button
+  export default {
+    name: 'app',
+    data () {
+      return {
+        seller: {}
+      }
+    },
+    created () {
+      getSeller().then((seller) => {
+        console.log(seller)
+        this.seller = seller
+      })
+    },
+    components: {
+      VHeader
+    }
   }
-}
 </script>
 <style lang="stylus">
 
