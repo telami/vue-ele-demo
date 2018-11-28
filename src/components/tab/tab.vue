@@ -65,9 +65,14 @@
         }
       }
     },
+    mounted () {
+      this.onchange(this.index)
+    },
     methods: {
       onChange (current) {
         this.index = current
+        const component = this.$refs.component[current]
+        component.fetch && component.fetch()
       },
       onScroll (pos) {
         const tabBarWidth = this.$refs.tabBar.$el.clientWidth
