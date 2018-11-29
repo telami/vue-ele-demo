@@ -7,7 +7,7 @@
         :options="scrollOptions"
         v-if="goods.length"
       >
-        <cube-scroller-nav-panel
+        <cube-scroll-nav-panel
           v-for="good in goods"
           :key="good.name"
           :label="good.name"
@@ -28,26 +28,56 @@
                   <span class="now">￥{{food.price}}</span>
                   <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
+                <div class="cart-control-wrapper">
+                  <cart-control :food="food"></cart-control>
+                </div>
               </div>
             </li>
           </ul>
-        </cube-scroller-nav-panel>
+        </cube-scroll-nav-panel>
       </cube-scroll-nav>
+      <div class="shop-cart-wrapper">
+        <shop-cart
+          :selectFoods="selectFoods"
+          :deliveryPrice="seller.deliveryPrice"
+          :minPrice="seller.minPrice"
+        >
+        </shop-cart>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
   import { getGoods } from 'api'
+  import ShopCart from 'components/shop-cart/shop-cart'
+  import CartControl from 'components/cart-control/cart-control'
 
   export default {
     name: 'goods',
+    components: { CartControl, ShopCart },
     props: {
       data: {
         type: Object,
         default () {
           return {}
         }
+      }
+    },
+    computed: {
+      seller () {
+        return this.data.seller
+      },
+      selectFoods () {
+        let ret = []
+        this.goods.forEach((good) => {
+          good.foods.forEach((food) => {
+            if (food.count) {
+              ret.push(food)
+            }
+          })
+        })
+        return ret
       }
     },
     data () {

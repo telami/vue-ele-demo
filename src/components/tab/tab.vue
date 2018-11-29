@@ -66,7 +66,7 @@
       }
     },
     mounted () {
-      this.onchange(this.index)
+      this.onChange(this.index)
     },
     methods: {
       onChange (current) {
