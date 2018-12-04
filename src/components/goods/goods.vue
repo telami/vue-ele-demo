@@ -29,7 +29,7 @@
                   <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
                 <div class="cart-control-wrapper">
-                  <cart-control :food="food"></cart-control>
+                  <cart-control @add="onAdd" :food="food"></cart-control>
                 </div>
               </div>
             </li>
@@ -38,6 +38,7 @@
       </cube-scroll-nav>
       <div class="shop-cart-wrapper">
         <shop-cart
+          ref="shopCart"
           :selectFoods="selectFoods"
           :deliveryPrice="seller.deliveryPrice"
           :minPrice="seller.minPrice"
@@ -94,6 +95,9 @@
         getGoods().then((goods) => {
           this.goods = goods
         })
+      },
+      onAdd (el) {
+        this.$refs.shopCart.drop(el)
       }
     }
   }
@@ -111,7 +115,7 @@
       width: 100%
       top: 0
       left: 0
-      bottom: 48px
+      bottom: 0px
     >>> .cube-scroll-nav-bar
       width: 80px
       white-space: normal
