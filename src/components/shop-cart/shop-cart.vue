@@ -206,6 +206,7 @@
             list: this.shopCartListComp
           }
         })
+        this.shopCartStickyComp.show()
       }
     },
     watch: {
