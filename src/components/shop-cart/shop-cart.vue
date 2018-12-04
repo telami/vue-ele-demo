@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="shopcart">
-      <div class="content">
+      <div class="content" @click="toggleList">
         <div class="content-left">
           <div class="logo-wrapper">
             <div class="logo" :class="{'highlight':totalCount>0}">
@@ -71,11 +71,20 @@
       minPrice: {
         type: Number,
         default: 0
+      },
+      fold: {
+        type: Boolean,
+        default: true
+      },
+      sticky: {
+        type: Boolean,
+        default: false
       }
     },
     data () {
       return {
-        balls: createBalls()
+        balls: createBalls(),
+        listFold: this.fold
       }
     },
     computed: {
@@ -136,17 +145,77 @@
         const inner = el.getElementsByClassName(innerClsHook)[0]
         inner.style.transform = inner.style.webkitTransform = `translate3d(${x}px,0,0)`
       },
-      dropping (el,done) {
+      dropping (el, done) {
         this._reflow = document.body.offsetHeight
         el.style.transform = el.style.webkitTransform = `translate3d(0,0,0)`
         const inner = el.getElementsByClassName(innerClsHook)[0]
         inner.style.transform = inner.style.webkitTransform = `translate3d(0,0,0)`
-        el.addEventListener('transitionend',done)
+        el.addEventListener('transitionend', done)
       },
       afterDrop (el) {
         const ball = this.dropBalls.shift()
         ball.show = false
         el.style.display = 'none'
+      },
+      toggleList () {
+        if (this.listFold) {
+          if (!this.totalCount) {
+            return
+          }
+          this.listFold = false
+          this._showShopCartList()
+          this._showShopCartSticky()
+        } else {
+          this.listFold = true
+          this._hideShopCartList()
+        }
+      },
+      _showShopCartList () {
+        this.shopCartListComp = this.shopCartListComp || this.$createShopCartList({
+          $props: {
+            selectFoods: 'selectFoods'
+          },
+          $events: {
+            leave: () => {
+              this._hideShopCartSticky()
+            },
+            hide: () => {
+              this.listFold = true
+            },
+            add: (el) => {
+              this.shopCartStickyComp.drop(el)
+            }
+          }
+        })
+        this.shopCartListComp.show()
+      },
+      _hideShopCartList () {
+        const comp = this.sticky ? this.$parent.list : this.shopCartListComp
+        comp.hide && comp.hide()
+      },
+      _hideShopCartSticky() {
+        this.shopCartStickyComp.hide()
+      },
+      _showShopCartSticky () {
+        this.shopCartStickyComp = this.shopCartStickyComp || this.$createShopCartSticky({
+          $props: {
+            selectFoods: 'selectFoods',
+            deliveryPrice: 'deliveryPrice',
+            minPrice: 'minPrice',
+            fold: 'listFold',
+            list: this.shopCartListComp
+          }
+        })
+      }
+    },
+    watch: {
+      fold(newVal) {
+        this.listFold = newVal
+      },
+      totalCount(count) {
+        if (!this.fold && count === 0) {
+          this._hideShopCartList()
+        }
       }
     }
   }
