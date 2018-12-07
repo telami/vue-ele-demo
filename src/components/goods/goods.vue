@@ -36,7 +36,12 @@
           :title="good.name"
         >
           <ul>
-            <li v-for="food in good.foods" :key="food.name" class="food-item">
+            <li
+              @click="selectFood(food)"
+              v-for="food in good.foods"
+              :key="food.name"
+              class="food-item"
+            >
               <div class="icon">
                 <img width="57" height="57" :src="food.icon">
               </div>
@@ -127,17 +132,56 @@
         scrollOptions: {
           click: false,
           directionLockThreshold: 0
-        }
+        },
+        selectedFood: {}
       }
     },
     methods: {
+      selectFood (food) {
+        this.selectedFood = food
+        this._showFood()
+        this._showShopCartSticky()
+      },
       fetch () {
-        getGoods().then((goods) => {
-          this.goods = goods
-        })
+        if (!this.fetched) {
+          this.fetched = true
+          getGoods().then((goods) => {
+            this.goods = goods
+          })
+        }
       },
       onAdd (el) {
         this.$refs.shopCart.drop(el)
+      },
+      _showFood () {
+        this.foodComp = this.foodComp || this.$createFood({
+          $props: {
+            food: 'selectedFood'
+          },
+          $events: {
+            leave: () => {
+              this._hideShopCartSticky()
+            },
+            add: (el) => {
+              this.shopCartStickyComp.drop(el)
+            }
+          }
+        })
+        this.foodComp.show()
+      },
+      _showShopCartSticky () {
+        this.shopCartStickyComp = this.shopCartStickyComp || this.$createShopCartSticky({
+          $props: {
+            selectFoods: 'selectFoods',
+            deliveryPrice: this.seller.deliveryPrice,
+            minPrice: this.seller.minPrice,
+            fold: true
+          }
+        })
+        this.shopCartStickyComp.show()
+      },
+      _hideShopCartSticky () {
+        this.shopCartStickyComp.hide()
       }
     }
   }
