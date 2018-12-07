@@ -25,7 +25,7 @@
               <cart-control @add="addFood" :food="food"></cart-control>
             </div>
             <transition name="fade">
-              <div @click.stop="addFirst" class="buy" v-show="!food.count">
+              <div @click="addFirst" class="buy" v-show="!food.count">
                 加入购物车
               </div>
             </transition>
@@ -125,7 +125,7 @@
         this.$emit(EVENT_ADD, target)
       },
       format(time) {
-        return moment(time).format('YYYY-MM-DD hh:mm')
+        return moment(time).format('YYYY-MM-DD hh:mm:ss')
       }
     },
     components: {
