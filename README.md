@@ -1,5 +1,7 @@
 # vue-ele
 
+##花了198买的课，知识付费的年代，真是让人又爱又恨
+
 ## Project setup
 ```
 yarn install
