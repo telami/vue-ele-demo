@@ -27,6 +27,9 @@
       <span class="bulletin-text">{{seller.bulletin}}</span>
       <i class="icon-keyboard_arrow_right"></i>
     </div>
+    <div class="background">
+      <img :src="seller.avatar" width="100%" height="100%"/>
+    </div>
   </div>
 </template>
 
@@ -55,7 +58,7 @@
     position relative
     overflow hidden
     color: #fff
-    background-color: #999
+    background rgba(7, 17, 27, 0.5)
     .content-wrapper
       position: relative
       padding 24px 12px 18px 24px
@@ -129,24 +132,39 @@
           font-size 10px
 
     .bulletin-wrapper
+      position: relative;
       height: 28px
       line-height 28px
       padding: 0 22px 0 12px
-      white-space:nowrap
+      white-space: nowrap
       overflow: hidden
       text-overflow ellipsis
-      font-size 0
+      background: rgba(7, 17, 27, 0.2)
       .bulletin-title
         display: inline-block
         vertical-align top
-        margin-top 7px
+        margin-top 8px
         width: 22px
-        height:12px
+        height: 12px
         bg-image('bulletin')
+        background-size 22px 12px
         background-repeat no-repeat
       .bulletin-text
         margin 0 4px
         vertical-align top
-        font-size:10px
-
+        font-size: 10px
+        font-weight: bold
+      .icon-keyboard_arrow_right
+        position: absolute;
+        font-size: 10px
+        right: 12px
+        top: 8px
+    .background
+      position: absolute
+      top: 0
+      left: 0
+      width: 100%
+      height: 100%
+      z-index -1
+      filter blur(10px)
 </style>
